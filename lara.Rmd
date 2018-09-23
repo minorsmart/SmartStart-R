@@ -18,7 +18,7 @@ Hoe kan Lara deze workflow zo efficient en effectief mogelijk uitvoeren? In deze
 
 ## Libraries laden
 We gaan zo meteen een aantal functies gebruiken die niet standaard in R zitten. Deze kunnen we echter eenvoudig laden met de `library()` functie.
-```{r}
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
 library(gsheet)
 library(tidyverse)
 library(plotly)
@@ -71,6 +71,7 @@ p <- ggplot(rawDF) +
 p
 ```
 
+Met functies uit het package `plotly` kunnen we interactie toevoegen.
 ```{r}
 ggplotly(p)
 ```
