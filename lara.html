@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Witek ten Hove" />
+
+
+<title>Intro R</title>
+
+<script src="lara_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="lara_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="lara_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="lara_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="lara_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="lara_files/navigation-1.1/tabsets.js"></script>
+<link href="lara_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="lara_files/highlightjs-9.12.0/highlight.js"></script>
+<title>FABDA</title>
+<link href="https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c|Roboto" rel="stylesheet">
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Intro R</h1>
+<h4 class="author"><em>Witek ten Hove</em></h4>
+<h4 class="date"><em>24-09-2018</em></h4>
+
+</div>
+
+
+<div id="inleiding" class="section level2">
+<h2>Inleiding</h2>
+<p>Lara is verantwoordelijk voor het toezicht op het veiligheidsbeleid bij een multinational. Hiervoor gebruikt ze data die ze van de managers van de verschillende productielocaties krijgt. Wekelijks vullen ze een vragenlijst in. Op basis van de antwoorden kan Lara zich een beeld vormen van de ontwikkelingen bij de afzonderlijke locaties en zien of het beleid in een voldoende tempo wordt uitgevoerd. Lara stuurt de data maandelijks door aan het hoofd van de afdeling Risk Management met een analyse en commentaar.</p>
+<p>Hoe kan Lara deze workflow zo efficient en effectief mogelijk uitvoeren? In deze workshop gaan we Lara helpen met dit vraagstuk.</p>
+</div>
+<div id="data-inlezen" class="section level2">
+<h2>Data inlezen</h2>
+<p>De data wordt verzameld via online formulieren. Iedere week vullen alle managers hun gegevens in en deze worden verzameld in een database. Via een query kan Lara de data exporteren naar een Google Spreadsheet. Deze kan met behulp van de <code>gsheet2tbl()</code> worden ingelezen in R.</p>
+<pre class="r"><code>library(gsheet)
+
+rawDF &lt;- gsheet2tbl(&quot;https://docs.google.com/spreadsheets/d/1QtHkz5_-9qwHPfRI6ceKgQsXSNd9XXN_rZiPLd8Ee7U/edit?usp=sharing&quot;)
+
+head(rawDF)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   id    month  year value date      
+##   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt; &lt;date&gt;    
+## 1 EU1       1  2015   1   2015-01-01
+## 2 EU1       2  2015   1   2015-02-01
+## 3 EU1       3  2015   0.8 2015-03-01
+## 4 EU1       4  2015   1.1 2015-04-01
+## 5 EU1       5  2015   0.9 2015-05-01
+## 6 EU1       6  2015   1.2 2015-06-01</code></pre>
+<pre class="r"><code>summary(rawDF)</code></pre>
+<pre><code>##       id                month            year          value          
+##  Length:504         Min.   : 1.00   Min.   :2015   Min.   :0.000e+00  
+##  Class :character   1st Qu.: 3.75   1st Qu.:2016   1st Qu.:1.000e+00  
+##  Mode  :character   Median : 6.50   Median :2018   Median :2.000e+00  
+##                     Mean   : 6.50   Mean   :2018   Mean   :9.281e+13  
+##                     3rd Qu.: 9.25   3rd Qu.:2020   3rd Qu.:1.429e+14  
+##                     Max.   :12.00   Max.   :2021   Max.   :9.524e+14  
+##                                                    NA&#39;s   :240        
+##       date           
+##  Min.   :2015-01-01  
+##  1st Qu.:2016-09-23  
+##  Median :2018-06-16  
+##  Mean   :2018-06-16  
+##  3rd Qu.:2020-03-08  
+##  Max.   :2021-12-01  
+## </code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
